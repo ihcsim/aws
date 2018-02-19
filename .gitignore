@@ -1,0 +1,5 @@
+*.swp
+backend-config.tfvars
+*.tfstate
+*.tfstate.backup
+.terraform
