@@ -1,6 +1,5 @@
-variable "region" {
-  default = "us-west-2"
-}
+variable "region" {}
+variable "keypair_name" {}
 
 variable "project" {
   default = "isim-ao-training"
@@ -36,4 +35,23 @@ variable "subnets_private_cidr" {
     "us-west-2b" = "10.50.100.0/24"
     "us-west-2c" = "10.50.200.0/24"
   }
+}
+
+variable "web_asg_size" {
+  default = {
+    "min" = 1
+    "max" = 3
+  }
+}
+
+variable "instance_type" {
+  default = {
+    "web" = "t2.micro"
+    "game" = "t2.micro"
+    "analytics" = "t2.micro"
+  }
+}
+
+variable "ubuntu_ami" {
+  default = "ami-79873901"
 }
