@@ -1,5 +1,6 @@
-package_updat: true
+package_update: true
 package_upgrade: true
 
 packages:
 - ntp
+- apache2

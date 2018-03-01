@@ -40,7 +40,7 @@ variable "subnets_private_cidr" {
 variable "web_asg_size" {
   default = {
     "min" = 1
-    "max" = 3
+    "max" = 5
   }
 }
 
@@ -54,4 +54,12 @@ variable "instance_type" {
 
 variable "ubuntu_ami" {
   default = "ami-79873901"
+}
+
+variable "metrics_alarm_web_cpu_upper_threshold" {
+  default = "70"
+}
+
+variable "metrics_alarm_web_cpu_lower_threshold" {
+  default = "50"
 }
