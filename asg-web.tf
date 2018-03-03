@@ -30,7 +30,7 @@ resource "aws_autoscaling_policy" "web-cpu-grow" {
   policy_type = "StepScaling"
   min_adjustment_magnitude = 1
 
-  # if 80 <= cpu_util < 90, increase desired capacity by 10%
+  # if 80 <= cpu_util_percent < 90, increase desired capacity by 10%
   # 10% of 1 is rounded to 1
   step_adjustment {
     scaling_adjustment = 10
@@ -38,7 +38,7 @@ resource "aws_autoscaling_policy" "web-cpu-grow" {
     metric_interval_upper_bound = 20
   }
 
-  # if cpu_util >= 90, increase desired capacity by 20%
+  # if cpu_util_percent >= 90, increase desired capacity by 20%
   # 20% of 2 is rounded to 1.
   step_adjustment {
     scaling_adjustment = 20
@@ -48,7 +48,7 @@ resource "aws_autoscaling_policy" "web-cpu-grow" {
 
 resource "aws_cloudwatch_metric_alarm" "web-cpu-grow" {
   alarm_name = "web-cpu-alarm-grow"
-  alarm_description = "Web tier EC2 instances metrics alarm to increase capacity"
+  alarm_description = "Web tier EC2 instances CPU metric alarm to increase capacity"
 
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods = "2"
@@ -56,7 +56,7 @@ resource "aws_cloudwatch_metric_alarm" "web-cpu-grow" {
   namespace = "AWS/EC2"
   period = "120"
   statistic = "Average"
-  threshold = "${var.metrics_alarm_web_cpu_upper_threshold}"
+  threshold = "${var.metrics_alarm_web_cpu_thresholds["upper"]}"
 
   alarm_actions = ["${aws_autoscaling_policy.web-cpu-grow.arn}"]
 
@@ -88,7 +88,7 @@ resource "aws_autoscaling_policy" "web-cpu-shrink" {
 
 resource "aws_cloudwatch_metric_alarm" "web-cpu-shrink" {
   alarm_name = "web-cpu-alarm-shrink"
-  alarm_description = "Web tier EC2 instances metrics alarm to decrease capacity"
+  alarm_description = "Web tier EC2 instances CPU metric alarm to decrease capacity"
 
   comparison_operator = "LessThanOrEqualToThreshold"
   evaluation_periods = "2"
@@ -96,9 +96,93 @@ resource "aws_cloudwatch_metric_alarm" "web-cpu-shrink" {
   namespace = "AWS/EC2"
   period = "120"
   statistic = "Average"
-  threshold = "${var.metrics_alarm_web_cpu_lower_threshold}"
+  threshold = "${var.metrics_alarm_web_cpu_thresholds["lower"]}"
 
   alarm_actions = ["${aws_autoscaling_policy.web-cpu-shrink.arn}"]
+
+  dimensions {
+    AutoScalingGroupName = "${aws_autoscaling_group.web.name}"
+  }
+}
+
+resource "aws_autoscaling_policy" "web-network-grow" {
+  name = "web-network-grow"
+  autoscaling_group_name = "${aws_autoscaling_group.web.name}"
+  adjustment_type = "PercentChangeInCapacity"
+  policy_type = "StepScaling"
+  min_adjustment_magnitude = 1
+
+  # if 1000000 <= network_in_bytes < 2000000, increase desired capacity by 10%
+  # 10% of 1 is rounded to 1
+  step_adjustment {
+    scaling_adjustment = 10
+    metric_interval_lower_bound = 0
+    metric_interval_upper_bound = 1000000
+  }
+
+  # if network_in >= 2000000, increase desired capacity by 20%
+  # 20% of 2 is rounded to 1.
+  step_adjustment {
+    scaling_adjustment = 20
+    metric_interval_lower_bound = 1000000
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "web-network-grow" {
+  alarm_name = "web-network-alarm-grow"
+  alarm_description = "Web tier EC2 instances network metric alarm to increase capacity"
+
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods = "2"
+  metric_name = "NetworkIn"
+  namespace = "AWS/EC2"
+  period = "120"
+  statistic = "Average"
+  threshold = "${var.metrics_alarm_web_network_thresholds["upper"]}"
+
+  alarm_actions = ["${aws_autoscaling_policy.web-network-grow.arn}"]
+
+  dimensions {
+    AutoScalingGroupName = "${aws_autoscaling_group.web.name}"
+  }
+}
+
+resource "aws_autoscaling_policy" "web-network-shrink" {
+  name = "web-network-shrink"
+  autoscaling_group_name = "${aws_autoscaling_group.web.name}"
+  adjustment_type = "PercentChangeInCapacity"
+  policy_type = "StepScaling"
+  min_adjustment_magnitude = 1
+
+  # if 250000 <= network_in_bytes < 500000, increase desired capacity by 10%
+  # 10% of 1 is rounded to 1
+  step_adjustment {
+    scaling_adjustment = -10
+    metric_interval_upper_bound = 0
+    metric_interval_lower_bound = -250000
+  }
+
+  # if network_in < 250000, increase desired capacity by 20%
+  # 20% of 2 is rounded to 1.
+  step_adjustment {
+    scaling_adjustment = -20
+    metric_interval_upper_bound = -250000
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "web-network-shrink" {
+  alarm_name = "web-network-alarm-shrink"
+  alarm_description = "Web tier EC2 instances network metric alarm to decrease capacity"
+
+  comparison_operator = "LessThanOrEqualToThreshold"
+  evaluation_periods = "2"
+  metric_name = "NetworkIn"
+  namespace = "AWS/EC2"
+  period = "120"
+  statistic = "Average"
+  threshold = "${var.metrics_alarm_web_network_thresholds["lower"]}"
+
+  alarm_actions = ["${aws_autoscaling_policy.web-network-shrink.arn}"]
 
   dimensions {
     AutoScalingGroupName = "${aws_autoscaling_group.web.name}"

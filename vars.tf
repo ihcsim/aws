@@ -56,10 +56,16 @@ variable "ubuntu_ami" {
   default = "ami-79873901"
 }
 
-variable "metrics_alarm_web_cpu_upper_threshold" {
-  default = "70"
+variable "metrics_alarm_web_cpu_thresholds" {
+  default = {
+    "upper" = "70"
+    "lower" = "50"
+  }
 }
 
-variable "metrics_alarm_web_cpu_lower_threshold" {
-  default = "50"
+variable "metrics_alarm_web_network_thresholds" {
+  default = {
+    "upper" = "1000000"
+    "lower" = "500000"
+  }
 }
