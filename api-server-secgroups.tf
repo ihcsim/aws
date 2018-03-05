@@ -1,6 +1,6 @@
-resource "aws_security_group" "web" {
-  name = "${var.project}-web"
-  description = "Security group for the web tier"
+resource "aws_security_group" "api_server" {
+  name = "${var.project}-api-server"
+  description = "Security group for the API Servers"
   vpc_id = "${aws_vpc.main.id}"
 
   ingress {
@@ -32,7 +32,7 @@ resource "aws_security_group" "web" {
   }
 
   tags {
-    Name = "${var.project}-web"
+    Name = "${var.project}-api-server"
     Owner = "${var.author}"
     Project = "${var.project}"
   }

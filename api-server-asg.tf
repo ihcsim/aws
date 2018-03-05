@@ -1,10 +1,10 @@
-resource "aws_autoscaling_group" "web" {
-  name = "${var.project}-web"
-  min_size = "${var.web_asg_size["min"]}"
-  max_size = "${var.web_asg_size["max"]}"
-  desired_capacity = "${var.web_asg_size["min"]}"
+resource "aws_autoscaling_group" "api_server" {
+  name = "${var.project}-api-server"
+  min_size = "${var.api_server_asg_size["min"]}"
+  max_size = "${var.api_server_asg_size["max"]}"
+  desired_capacity = "${var.api_server_asg_size["min"]}"
   availability_zones = "${var.subnets_az}"
-  launch_configuration = "${aws_launch_configuration.web.name}"
+  launch_configuration = "${aws_launch_configuration.api_server.name}"
 
   # needed for instance AssociatePublicIpAddress to work
   vpc_zone_identifier = ["${aws_subnet.public.*.id}"]
@@ -23,9 +23,9 @@ resource "aws_autoscaling_group" "web" {
   ]
 }
 
-resource "aws_autoscaling_policy" "web-cpu-grow" {
-  name = "web-cpu-grow"
-  autoscaling_group_name = "${aws_autoscaling_group.web.name}"
+resource "aws_autoscaling_policy" "api_server_cpu_grow" {
+  name = "api-server-cpu-grow"
+  autoscaling_group_name = "${aws_autoscaling_group.api_server.name}"
   adjustment_type = "PercentChangeInCapacity"
   policy_type = "StepScaling"
   min_adjustment_magnitude = 1
@@ -46,9 +46,9 @@ resource "aws_autoscaling_policy" "web-cpu-grow" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "web-cpu-grow" {
-  alarm_name = "web-cpu-alarm-grow"
-  alarm_description = "Web tier EC2 instances CPU metric alarm to increase capacity"
+resource "aws_cloudwatch_metric_alarm" "api_server_cpu_grow" {
+  alarm_name = "api-server-cpu-alarm-grow"
+  alarm_description = "API Servers EC2 instances CPU metric alarm to increase capacity"
 
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods = "2"
@@ -56,18 +56,18 @@ resource "aws_cloudwatch_metric_alarm" "web-cpu-grow" {
   namespace = "AWS/EC2"
   period = "120"
   statistic = "Average"
-  threshold = "${var.metrics_alarm_web_cpu_thresholds["upper"]}"
+  threshold = "${var.metrics_alarm_api_server_cpu_thresholds["upper"]}"
 
-  alarm_actions = ["${aws_autoscaling_policy.web-cpu-grow.arn}"]
+  alarm_actions = ["${aws_autoscaling_policy.api_server_cpu_grow.arn}"]
 
   dimensions {
-    AutoScalingGroupName = "${aws_autoscaling_group.web.name}"
+    AutoScalingGroupName = "${aws_autoscaling_group.api_server.name}"
   }
 }
 
-resource "aws_autoscaling_policy" "web-cpu-shrink" {
-  name = "web-cpu-shrink"
-  autoscaling_group_name = "${aws_autoscaling_group.web.name}"
+resource "aws_autoscaling_policy" "api_server_cpu_shrink" {
+  name = "api_server-cpu-shrink"
+  autoscaling_group_name = "${aws_autoscaling_group.api_server.name}"
   adjustment_type = "PercentChangeInCapacity"
   policy_type = "StepScaling"
   min_adjustment_magnitude = 1
@@ -86,9 +86,9 @@ resource "aws_autoscaling_policy" "web-cpu-shrink" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "web-cpu-shrink" {
-  alarm_name = "web-cpu-alarm-shrink"
-  alarm_description = "Web tier EC2 instances CPU metric alarm to decrease capacity"
+resource "aws_cloudwatch_metric_alarm" "api_server_cpu_shrink" {
+  alarm_name = "api-server-cpu-alarm-shrink"
+  alarm_description = "API Server EC2 instances CPU metric alarm to decrease capacity"
 
   comparison_operator = "LessThanOrEqualToThreshold"
   evaluation_periods = "2"
@@ -96,18 +96,18 @@ resource "aws_cloudwatch_metric_alarm" "web-cpu-shrink" {
   namespace = "AWS/EC2"
   period = "120"
   statistic = "Average"
-  threshold = "${var.metrics_alarm_web_cpu_thresholds["lower"]}"
+  threshold = "${var.metrics_alarm_api_server_cpu_thresholds["lower"]}"
 
-  alarm_actions = ["${aws_autoscaling_policy.web-cpu-shrink.arn}"]
+  alarm_actions = ["${aws_autoscaling_policy.api_server_cpu_shrink.arn}"]
 
   dimensions {
-    AutoScalingGroupName = "${aws_autoscaling_group.web.name}"
+    AutoScalingGroupName = "${aws_autoscaling_group.api_server.name}"
   }
 }
 
-resource "aws_autoscaling_policy" "web-network-grow" {
-  name = "web-network-grow"
-  autoscaling_group_name = "${aws_autoscaling_group.web.name}"
+resource "aws_autoscaling_policy" "api_server_network_grow" {
+  name = "api-server-network-grow"
+  autoscaling_group_name = "${aws_autoscaling_group.api_server.name}"
   adjustment_type = "PercentChangeInCapacity"
   policy_type = "StepScaling"
   min_adjustment_magnitude = 1
@@ -128,9 +128,9 @@ resource "aws_autoscaling_policy" "web-network-grow" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "web-network-grow" {
-  alarm_name = "web-network-alarm-grow"
-  alarm_description = "Web tier EC2 instances network metric alarm to increase capacity"
+resource "aws_cloudwatch_metric_alarm" "api_server_network_grow" {
+  alarm_name = "api-server-network-alarm-grow"
+  alarm_description = "API Server EC2 instances network metric alarm to increase capacity"
 
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods = "2"
@@ -138,18 +138,18 @@ resource "aws_cloudwatch_metric_alarm" "web-network-grow" {
   namespace = "AWS/EC2"
   period = "120"
   statistic = "Average"
-  threshold = "${var.metrics_alarm_web_network_thresholds["upper"]}"
+  threshold = "${var.metrics_alarm_api_server_network_thresholds["upper"]}"
 
-  alarm_actions = ["${aws_autoscaling_policy.web-network-grow.arn}"]
+  alarm_actions = ["${aws_autoscaling_policy.api_server_network_grow.arn}"]
 
   dimensions {
-    AutoScalingGroupName = "${aws_autoscaling_group.web.name}"
+    AutoScalingGroupName = "${aws_autoscaling_group.api_server.name}"
   }
 }
 
-resource "aws_autoscaling_policy" "web-network-shrink" {
-  name = "web-network-shrink"
-  autoscaling_group_name = "${aws_autoscaling_group.web.name}"
+resource "aws_autoscaling_policy" "api_server_network_shrink" {
+  name = "api-server-network-shrink"
+  autoscaling_group_name = "${aws_autoscaling_group.api_server.name}"
   adjustment_type = "PercentChangeInCapacity"
   policy_type = "StepScaling"
   min_adjustment_magnitude = 1
@@ -170,9 +170,9 @@ resource "aws_autoscaling_policy" "web-network-shrink" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "web-network-shrink" {
-  alarm_name = "web-network-alarm-shrink"
-  alarm_description = "Web tier EC2 instances network metric alarm to decrease capacity"
+resource "aws_cloudwatch_metric_alarm" "api-server-network-shrink" {
+  alarm_name = "api-server-network-alarm-shrink"
+  alarm_description = "api_server tier EC2 instances network metric alarm to decrease capacity"
 
   comparison_operator = "LessThanOrEqualToThreshold"
   evaluation_periods = "2"
@@ -180,26 +180,26 @@ resource "aws_cloudwatch_metric_alarm" "web-network-shrink" {
   namespace = "AWS/EC2"
   period = "120"
   statistic = "Average"
-  threshold = "${var.metrics_alarm_web_network_thresholds["lower"]}"
+  threshold = "${var.metrics_alarm_api_server_network_thresholds["lower"]}"
 
-  alarm_actions = ["${aws_autoscaling_policy.web-network-shrink.arn}"]
+  alarm_actions = ["${aws_autoscaling_policy.api_server_network_shrink.arn}"]
 
   dimensions {
-    AutoScalingGroupName = "${aws_autoscaling_group.web.name}"
+    AutoScalingGroupName = "${aws_autoscaling_group.api_server.name}"
   }
 }
 
-resource "aws_launch_configuration" "web" {
-  name_prefix = "${var.project}-web"
-  instance_type = "${var.instance_type["web"]}"
+resource "aws_launch_configuration" "api_server" {
+  name_prefix = "${var.project}-api-server"
+  instance_type = "${var.instance_type["api_server"]}"
   image_id = "${var.ubuntu_ami}"
   key_name = "${var.keypair_name}"
   associate_public_ip_address = "true"
 
-  user_data = "${data.template_cloudinit_config.web.rendered}"
+  user_data = "${data.template_cloudinit_config.api_server.rendered}"
   security_groups = [
     "${aws_vpc.main.default_security_group_id}",
-    "${aws_security_group.web.id}",
+    "${aws_security_group.api_server.id}",
     "${aws_security_group.ssh.id}"
   ]
 
@@ -213,7 +213,7 @@ resource "aws_launch_configuration" "web" {
   }
 }
 
-data "template_cloudinit_config" "web" {
+data "template_cloudinit_config" "api_server" {
   part {
     content_type = "text/cloud-config"
     content = "${data.template_file.packages.rendered}"
