@@ -6,6 +6,9 @@ resource "aws_autoscaling_group" "api_server" {
   availability_zones = "${var.subnets_az}"
   launch_configuration = "${aws_launch_configuration.api_server.name}"
 
+  health_check_type = "ELB"
+  target_group_arns = ["${aws_lb_target_group.http.arn}"]
+
   # needed for instance AssociatePublicIpAddress to work
   vpc_zone_identifier = ["${aws_subnet.public.*.id}"]
 

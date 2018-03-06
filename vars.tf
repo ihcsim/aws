@@ -69,3 +69,8 @@ variable "metrics_alarm_api_server_network_thresholds" {
     "lower" = "500000"
   }
 }
+
+variable "ssl_cert_arn" {}
+
+variable "elb_access_logs_bucket" {}
+variable "elb_access_logs_bucket_prefix" {}
