@@ -11,6 +11,7 @@ resource "aws_lb" "api_server" {
   }
 
   tags {
+    Tier = "API Server"
     Owner = "${var.author}"
     Project = "${var.project}"
   }
@@ -47,6 +48,7 @@ resource "aws_lb_target_group" "http" {
   vpc_id = "${aws_vpc.main.id}"
 
   tags {
+    Tier = "API Server"
     Owner = "${var.author}"
     Project = "${var.project}"
   }

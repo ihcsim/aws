@@ -14,6 +14,11 @@ resource "aws_autoscaling_group" "api_server" {
 
   tags = [
     {
+      key = "Tier"
+      value = "API Server"
+      propagate_at_launch = true
+    },
+    {
       key = "Project"
       value = "${var.project}"
       propagate_at_launch = true
@@ -24,6 +29,30 @@ resource "aws_autoscaling_group" "api_server" {
       propagate_at_launch = true
     }
   ]
+}
+
+resource "aws_launch_configuration" "api_server" {
+  name_prefix = "${var.project}-api-server"
+  instance_type = "${var.instance_type["api_server"]}"
+  image_id = "${var.ubuntu_ami}"
+  key_name = "${var.keypair_name}"
+  associate_public_ip_address = "true"
+
+  user_data = "${data.template_cloudinit_config.api_server.rendered}"
+  security_groups = [
+    "${aws_vpc.main.default_security_group_id}",
+    "${aws_security_group.api_server.id}",
+    "${aws_security_group.ssh.id}"
+  ]
+
+  root_block_device {
+    volume_type = "${var.root_block_volume_types["api_server"]}"
+    volume_size = "${var.root_block_volume_sizes["api_server"]}"
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_autoscaling_policy" "api_server_cpu_grow" {
@@ -189,30 +218,6 @@ resource "aws_cloudwatch_metric_alarm" "api-server-network-shrink" {
 
   dimensions {
     AutoScalingGroupName = "${aws_autoscaling_group.api_server.name}"
-  }
-}
-
-resource "aws_launch_configuration" "api_server" {
-  name_prefix = "${var.project}-api-server"
-  instance_type = "${var.instance_type["api_server"]}"
-  image_id = "${var.ubuntu_ami}"
-  key_name = "${var.keypair_name}"
-  associate_public_ip_address = "true"
-
-  user_data = "${data.template_cloudinit_config.api_server.rendered}"
-  security_groups = [
-    "${aws_vpc.main.default_security_group_id}",
-    "${aws_security_group.api_server.id}",
-    "${aws_security_group.ssh.id}"
-  ]
-
-  root_block_device {
-    volume_type = "gp2"
-    volume_size = "8"
-  }
-
-  lifecycle {
-    create_before_destroy = true
   }
 }
 
