@@ -44,11 +44,55 @@ variable "api_server_asg_size" {
   }
 }
 
+variable "games_asg_size" {
+  default = {
+    "min" = 1
+    "max" = 5
+  }
+}
+
 variable "instance_type" {
   default = {
     "api_server" = "t2.micro"
-    "game" = "t2.micro"
+    "games" = "t2.micro"
     "analytics" = "t2.micro"
+  }
+}
+
+variable "root_block_volume_types" {
+  default = {
+    "api_server" = "gp2"
+    "games" = "gp2"
+    "analytics" = "gp2"
+  }
+}
+
+variable "root_block_volume_sizes" {
+  default = {
+    "api_server" = "8"
+    "games" = "8"
+    "analytics" = "8"
+  }
+}
+
+variable "data_block_volume_devices" {
+  default = {
+    "games" = "/dev/sdf"
+    "analytics" = "/dev/sdf"
+  }
+}
+
+variable "data_block_volume_types" {
+  default = {
+    "games" = "gp2"
+    "analytics" = "gp2"
+  }
+}
+
+variable "data_block_volume_sizes" {
+  default = {
+    "games" = "8"
+    "analytics" = "8"
   }
 }
 
@@ -74,3 +118,15 @@ variable "ssl_cert_arn" {}
 
 variable "elb_access_logs_bucket" {}
 variable "elb_access_logs_bucket_prefix" {}
+
+variable "games_user" {
+  default = "gamer"
+}
+
+variable "games_data_folder" {
+  default = "/opt/games/data"
+}
+
+variable "games_volume_device_name" {
+  default = "/dev/xvdf"
+}

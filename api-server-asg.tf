@@ -224,7 +224,7 @@ resource "aws_cloudwatch_metric_alarm" "api-server-network-shrink" {
 data "template_cloudinit_config" "api_server" {
   part {
     content_type = "text/cloud-config"
-    content = "${data.template_file.packages.rendered}"
+    content = "${data.template_file.api_server_packages.rendered}"
   }
 
   part {
@@ -233,8 +233,8 @@ data "template_cloudinit_config" "api_server" {
   }
 }
 
-data "template_file" "packages" {
-  template = "${file("${path.module}/bootstrap/cloudinit/packages")}"
+data "template_file" "api_server_packages" {
+  template = "${file("${path.module}/bootstrap/cloudinit/api-server/packages")}"
 }
 
 data "template_file" "hosts" {

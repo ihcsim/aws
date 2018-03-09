@@ -1,0 +1,9 @@
+fs_setup:
+- label: None
+  filesystem: ext4
+  device: ${device_name}
+  partition: "auto"
+  overwrite: "false"
+
+mounts:
+- [${device_name}, ${data_folder}, ext4, "defaults,nofail", 0, 2]
