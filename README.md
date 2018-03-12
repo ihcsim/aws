@@ -1,4 +1,15 @@
 # Bionic Kumquat Games
+
+## Table of Content
+
+* [Introduction](#introduction)
+* [Problem Definition](#problem-definition)
+* [Prerequisites](#prerequisites)
+* [Getting Started](#getting-started)
+* [Testing](#testing)
+* [Platform Design](#platform-design)
+
+## Introduction
 This project showcased how to use Terraform to provision a games hosting platform in the AWS environment. This project utilizs the following AWS services:
 
 * Networking - VPC, subnet, internet gateway, ELB
@@ -18,6 +29,7 @@ Once they have standardised their APIs they wish to migrate existing games into 
 
 ## Prerequisites
 The following is the list of prerequisites to provision the platform:
+
 1. [Terraform v0.11.3](https://www.terraform.io/downloads.html)
 1. [Awsume 2.1.5](https://github.com/trek10inc/awsume)
 1. [Go 1.9.3](https://golang.org/dl/)
@@ -112,7 +124,7 @@ This diagram depicts the key components of the platform.
 ![System diagram](img/system-diagram.png)
 
 ### API Server
-The API server handles HTTP and HTTPS requests from the games developer.
+The API server handles HTTP and HTTPS requests from the games developer. The games developer deploys a game to the platform by sending a YAML payload to the API Server via HTTP and HTTPS requests. Upon receiving the payload, the API Server validates the payload and sends it to a SQS queue.
 
 The elasticity of the API Servers cluster is managed by an Autoscaling Group whichdefines policy to grow and shrink the cluster based on the EC2 instances CPU utilization and the ELB network traffic. Cloudwatch metrics and _step scaling policies_ are defined to support this behaviour.
 
@@ -121,8 +133,15 @@ An Application Load Balancer fronts the API servers cluster with listeners defin
 Each EC2 instance utilizes cloudinit to run a set of scripts.
 
 ### Games
-The Games nodes host all the games applications.
+The Games nodes host all the games applications. The nodes wait for deployment payload to arrive on a SQS queue. Each payload will contain all the necessary informationon how to deploy the corresponding game (for e.g., the location of the Docker image etc.).
 
 An autoscaling group is defined to manage the elasticity of the Games nodes using target tracking CPU and network-in policies.
 
 Every EC2 instance has an ESB volume attached to it at the default location of `/opt/games/data`.
+
+### To-Do's
+
+1. Custom memory metrics for games nodes
+1. Provision SQS.
+1. SQS client on API Server.
+1. Lambda to picks up files from S3 buckets.
