@@ -77,8 +77,8 @@ variable "root_block_volume_sizes" {
 
 variable "data_block_volume_devices" {
   default = {
-    "games" = "/dev/sdf"
-    "analytics" = "/dev/sdf"
+    "games" = "/dev/xvdf"
+    "analytics" = "/dev/xvdf"
   }
 }
 
@@ -91,8 +91,8 @@ variable "data_block_volume_types" {
 
 variable "data_block_volume_sizes" {
   default = {
-    "games" = "8"
-    "analytics" = "8"
+    "games" = "4"
+    "analytics" = "4"
   }
 }
 
@@ -114,6 +114,15 @@ variable "metrics_alarm_api_server_network_thresholds" {
   }
 }
 
+variable "metrics_alarm_games_cpu_target" {
+  default = "70"
+}
+
+variable "metrics_alarm_games_network_in_target" {
+  default = "1000000"
+}
+
+
 variable "ssl_cert_arn" {}
 
 variable "elb_access_logs_bucket" {}
@@ -125,8 +134,4 @@ variable "games_user" {
 
 variable "games_data_folder" {
   default = "/opt/games/data"
-}
-
-variable "games_volume_device_name" {
-  default = "/dev/xvdf"
 }

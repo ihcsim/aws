@@ -96,3 +96,10 @@ The elasticity of the API Servers cluster is managed by an Autoscaling Group whi
 An Application Load Balancer fronts the API servers cluster with listeners defined at ports 80 and 443. The _https_ listener performs SSL termination prior to forwarding traffic to the target group.
 
 Each EC2 instance utilizes cloudinit to run a set of scripts.
+
+### Games
+The Games nodes host all the games applications.
+
+An autoscaling group is defined to manage the elasticity of the Games nodes using target tracking CPU and network-in policies.
+
+Every EC2 instance has an ESB volume attached to it at the default location of `/opt/games/data`.

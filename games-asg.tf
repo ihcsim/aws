@@ -1,7 +1,3 @@
-# To test:
-# ELB and target group
-# Metrics
-
 resource "aws_autoscaling_group" "games" {
   name = "${var.project}-games-nodes"
   min_size = "${var.games_asg_size["min"]}"
@@ -19,9 +15,6 @@ resource "aws_autoscaling_group" "games" {
     "GroupTerminatingInstances",
     "GroupTotalInstances"
   ]
-
-  #health_check_type = "ELB"
-  #target_group_arns = ["${aws_lb_target_group.games.arn}"]
 
   tags = [
     {
@@ -70,6 +63,72 @@ resource "aws_launch_configuration" "games" {
   }
 }
 
+resource "aws_autoscaling_policy" "games_cpu" {
+  name = "games-cpu"
+  autoscaling_group_name = "${aws_autoscaling_group.games.name}"
+  policy_type = "TargetTrackingScaling"
+
+  target_tracking_configuration {
+    predefined_metric_specification {
+      predefined_metric_type = "ASGAverageCPUUtilization"
+    }
+
+    target_value = "${var.metrics_alarm_games_cpu_target}"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "games_cpu" {
+  alarm_name = "games-cpu-alarm"
+  alarm_description = "Games EC2 instances metric alarm to maintain CPU capacity"
+
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods = "2"
+  metric_name = "CPUUtilization"
+  namespace = "AWS/EC2"
+  period = "60"
+  statistic = "Average"
+  threshold = "${var.metrics_alarm_games_cpu_target}"
+
+  alarm_actions = ["${aws_autoscaling_policy.games_cpu.arn}"]
+
+  dimensions {
+    AUtoScalingGroupName = "${aws_autoscaling_group.games.name}"
+  }
+}
+
+resource "aws_autoscaling_policy" "games_network_in" {
+  name = "games-network-in"
+  autoscaling_group_name = "${aws_autoscaling_group.games.name}"
+  policy_type = "TargetTrackingScaling"
+
+  target_tracking_configuration {
+    predefined_metric_specification {
+      predefined_metric_type = "ASGAverageNetworkIn"
+    }
+
+    target_value = "${var.metrics_alarm_games_network_in_target}"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "games_network_in" {
+  alarm_name = "games-network-in-alarm"
+  alarm_description = "Games EC2 instances metric alarm to maintain network-in capacity"
+
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods = "2"
+  metric_name = "NetworkIn"
+  namespace = "AWS/EC2"
+  period = "60"
+  statistic = "Average"
+  threshold = "${var.metrics_alarm_games_network_in_target}"
+
+  alarm_actions = ["${aws_autoscaling_policy.games_network_in.arn}"]
+
+  dimensions {
+    AUtoScalingGroupName = "${aws_autoscaling_group.games.name}"
+  }
+}
+
 data "template_cloudinit_config" "games" {
   part {
     content_type = "text/cloud-config"
@@ -97,6 +156,6 @@ data "template_file" "games_mounts" {
   vars {
     user = "${var.games_user}"
     data_folder = "${var.games_data_folder}"
-    device_name = "${var.games_volume_device_name}"
+    device_name = "${var.data_block_volume_devices["games"]}"
   }
 }
