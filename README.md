@@ -20,6 +20,7 @@ Once they have standardised their APIs they wish to migrate existing games into 
 The following is the list of prerequisites to provision the platform:
 1. [Terraform v0.11.3](https://www.terraform.io/downloads.html)
 1. [Awsume 2.1.5](https://github.com/trek10inc/awsume)
+1. [Go 1.9.3](https://golang.org/dl/)
 1. A valid (self-signed) SSL certificate.
 1. An AWS account with full permissions to all the AWS services mentioned above.
 
@@ -74,6 +75,28 @@ Upload a valid SSL certificate to the AWS Certificate Manager in the region of y
 After the SSL certificate is successfully added, provision the platform with:
 ```
 $ terraform apply
+```
+
+## Testing
+This section provides test cases to verify the correctness of the platform.
+
+### Load Testing
+The Makefile contains some load testing targets which will be useful for development and testing purposes.
+
+The following commands required Go to work:
+```
+$ make load-test/tool # download load testing tools
+$ API_SERVER_ALB=<your_api_server_alb_hostname> make load-test/network/light
+test -n "isim-ao-training-api-server-lb-137621501.us-west-2.elb.amazonaws.com" # Missing API Server ALB hostname
+echo "GET http://xxxxxxxxxxx.<region>.elb.amazonaws.com/" | vegeta attack -duration=5s | tee results.bin | vegeta report
+Requests      [total, rate]            250, 50.20
+Duration      [total, attack, wait]    4.999494s, 4.979999s, 19.495ms
+Latencies     [mean, 50, 95, 99, max]  20.091912ms, 19.678ms, 21.589ms, 28.606ms, 51.223ms
+Bytes In      [total, mean]            2830250, 11321.00
+Bytes Out     [total, mean]            0, 0.00
+Success       [ratio]                  100.00%
+Status Codes  [code:count]             200:250
+Error Set:
 ```
 
 ## Platform Design
