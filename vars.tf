@@ -135,3 +135,9 @@ variable "games_user" {
 variable "games_data_folder" {
   default = "/opt/games/data"
 }
+
+variable "cloudwatch_agent_download_url" {
+  default = {
+    "linux_amd64" = "https://s3.amazonaws.com/amazoncloudwatch-agent/linux/amd64/latest/AmazonCloudWatchAgent.zip"
+  }
+}

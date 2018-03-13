@@ -1,0 +1,5 @@
+runcmd:
+- [mkdir, /tmp/cloudwatch_agent]
+- [wget, "${download_url}", -O, /tmp/cloudwatch_agent/download.zip]
+- [unzip, /tmp/cloudwatch_agent/download.zip, -d, /tmp/cloudwatch_agent]
+- [/tmp/cloudwatch_agent/install.sh]

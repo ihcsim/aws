@@ -10,7 +10,7 @@
 * [Platform Design](#platform-design)
 
 ## Introduction
-This project showcased how to use Terraform to provision a games hosting platform in the AWS environment. This project utilizs the following AWS services:
+This project showcased how to use Terraform to provision a games hosting platform in the AWS environment. This project utilizes the following AWS services:
 
 * Networking - VPC, subnet, internet gateway, ELB
 * Compute - EC2, Autoscaling with step and target tracking policies
@@ -99,7 +99,7 @@ The following commands required Go to work:
 ```
 $ make load-test/tool # download load testing tools
 $ API_SERVER_ALB=<your_api_server_alb_hostname> make load-test/network/light
-test -n "isim-ao-training-api-server-lb-137621501.us-west-2.elb.amazonaws.com" # Missing API Server ALB hostname
+test -n "xxxxxxxxxxxx.<region>.elb.amazonaws.com" # Missing API Server ALB hostname
 echo "GET http://xxxxxxxxxxx.<region>.elb.amazonaws.com/" | vegeta attack -duration=5s | tee results.bin | vegeta report
 Requests      [total, rate]            250, 50.20
 Duration      [total, attack, wait]    4.999494s, 4.979999s, 19.495ms

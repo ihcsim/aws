@@ -40,6 +40,7 @@ resource "aws_launch_configuration" "games" {
   instance_type = "${var.instance_type["games"]}"
   image_id = "${var.ubuntu_ami}"
   key_name = "${var.keypair_name}"
+  iam_instance_profile = "${aws_iam_instance_profile.cloudwatch_agent.id}"
 
   user_data = "${data.template_cloudinit_config.games.rendered}"
   security_groups = [
@@ -144,6 +145,11 @@ data "template_cloudinit_config" "games" {
     content_type = "text/cloud-config"
     content = "${data.template_file.hosts.rendered}"
   }
+
+  part {
+    content_type = "text/cloud-config"
+    content = "${data.template_file.cloudwatch_agent.rendered}"
+  }
 }
 
 data "template_file" "games_packages" {
@@ -157,5 +163,13 @@ data "template_file" "games_mounts" {
     user = "${var.games_user}"
     data_folder = "${var.games_data_folder}"
     device_name = "${var.data_block_volume_devices["games"]}"
+  }
+}
+
+data "template_file" "cloudwatch_agent" {
+  template = "${file("${path.module}/bootstrap/cloudinit/games/cloudwatch_agent")}"
+
+  vars {
+    download_url = "${var.cloudwatch_agent_download_url["linux_amd64"]}"
   }
 }

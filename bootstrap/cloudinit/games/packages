@@ -3,3 +3,4 @@ package_upgrade: true
 
 packages:
 - ntp
+- unzip
