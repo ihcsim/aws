@@ -67,26 +67,48 @@ resource "aws_route_table_association" "public" {
   route_table_id = "${aws_route_table.public.id}"
 }
 
-#resource "aws_nat_gateway" "nat" {
-  #depends_on = ["aws_internet_gateway.igw", "aws_eip.nat"]
+resource "aws_route_table" "private" {
+  count = "${length(var.subnets_az)}"
+  vpc_id = "${aws_vpc.main.id}"
 
-  #count = "${length(var.subnets_az)}"
-  #allocation_id = "${element(aws_eip.nat.*.id, count.index)}"
-  #subnet_id = "${element(aws_subnet.public.*.id, count.index)}"
+  route {
+    cidr_block = "0.0.0.0/0"
+    nat_gateway_id = "${element(aws_nat_gateway.nat.*.id, count.index)}"
+  }
 
-  #tags {
-    #Name = "${var.subnets_az[count.index]}-${format("%02d", count.index)}"
-    #Owner = "${var.author}"
-    #Project = "${var.project}"
-  #}
-#}
+  tags {
+    Name = "${var.project}-private-${format("%02d", count.index)}"
+    Owner = "${var.author}"
+    Project = "${var.project}"
+  }
+}
 
-#resource "aws_eip" "nat" {
-  #count = "${length(var.subnets_az)}"
-  #vpc = "true"
+resource "aws_route_table_association" "private" {
+  count = "${length(var.subnets_az)}"
+  subnet_id = "${element(aws_subnet.private.*.id, count.index)}"
+  route_table_id = "${element(aws_route_table.private.*.id, count.index)}"
+}
 
-  #tags {
-    #Name = "${var.project}-${format("%02d", count.index)}"
-    #Owner = "${var.author}"
-    #Project = "${var.project}"  }
-#}
+resource "aws_nat_gateway" "nat" {
+  depends_on = ["aws_internet_gateway.main", "aws_eip.nat"]
+
+  count = "${length(var.subnets_az)}"
+  allocation_id = "${element(aws_eip.nat.*.id, count.index)}"
+  subnet_id = "${element(aws_subnet.public.*.id, count.index)}"
+
+  tags {
+    Name = "${var.project}-${var.subnets_az[count.index]}"
+    Owner = "${var.author}"
+    Project = "${var.project}"
+  }
+}
+
+resource "aws_eip" "nat" {
+  count = "${length(var.subnets_az)}"
+  vpc = "true"
+
+  tags {
+    Name = "${var.project}-${format("%02d", count.index)}"
+    Owner = "${var.author}"
+    Project = "${var.project}"  }
+}
