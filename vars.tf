@@ -141,3 +141,7 @@ variable "cloudwatch_agent_download_url" {
     "linux_amd64" = "https://s3.amazonaws.com/amazoncloudwatch-agent/linux/amd64/latest/AmazonCloudWatchAgent.zip"
   }
 }
+
+variable "cloudwatch_agent_config_remote_path" {
+  default = "/opt/aws/cloudwatch_agent.config"
+}

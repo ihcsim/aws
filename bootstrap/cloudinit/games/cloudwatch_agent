@@ -2,4 +2,11 @@ runcmd:
 - [mkdir, /tmp/cloudwatch_agent]
 - [wget, "${download_url}", -O, /tmp/cloudwatch_agent/download.zip]
 - [unzip, /tmp/cloudwatch_agent/download.zip, -d, /tmp/cloudwatch_agent]
-- [/tmp/cloudwatch_agent/install.sh]
+- [cd, /tmp/cloudwatch_agent]
+- [./install.sh]
+- [/opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl, -a, fetch-config, -m, ec2, -c, "file:${config_file_path}", -s]
+
+write_files:
+- path: ${config_file_path}
+  permissions: '0644'
+  content: ${config_file_content}

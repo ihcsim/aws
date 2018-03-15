@@ -15,7 +15,7 @@ This project showcased how to use Terraform to provision a games hosting platfor
 * Networking - VPC, subnet, internet gateway, ELB
 * Compute - EC2, Autoscaling with step and target tracking policies
 * Storage - S3, EBS
-* Monitoring - Cloudwatch metrics and alarms
+* Monitoring - CloudWatch metrics, alarms and agents
 * Application - cloudinit
 
 ## Problem Definition

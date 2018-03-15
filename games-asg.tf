@@ -171,5 +171,17 @@ data "template_file" "cloudwatch_agent" {
 
   vars {
     download_url = "${var.cloudwatch_agent_download_url["linux_amd64"]}"
+    config_file_path = "${var.cloudwatch_agent_config_remote_path}"
+    config_file_content = "${jsonencode(data.template_file.cloudwatch_agent_config.rendered)}"
+  }
+}
+
+data "template_file" "cloudwatch_agent_config" {
+  template = "${file("${path.module}/bootstrap/config/games/cloudwatch_agent.json")}"
+
+  vars {
+    namespace_suffix = "${var.author}"
+    region = "${var.region}"
+    logfile = "${var.games_data_folder}/cloudwatch_agent.log"
   }
 }

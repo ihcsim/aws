@@ -1,0 +1,24 @@
+{
+  "agent": {
+    "metrics_collection_interval": 120,
+    "region": "${region}",
+    "logfile": "${logfile}"
+  },
+  "metrics": {
+    "namespace": "CWAgenti-${namespace_suffix}",
+    "metrics_collected": {
+      "mem": {
+        "measurement": ["mem_free", "mem_total"]
+      },
+      "swap": {
+        "measurement": ["swap_free", "swap_used"]
+      }
+    },
+    "append_dimensions": {
+      "ImageId": "$${aws:ImageId}",
+      "InstanceId": "$${aws:InstanceId}",
+      "InstanceType": "$${aws:InstanceType}",
+      "AutoScalingGroupName": "$${aws:AutoScalingGroupName}"
+    }
+  }
+}
