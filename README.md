@@ -8,6 +8,8 @@
 * [Getting Started](#getting-started)
 * [Testing](#testing)
 * [Platform Design](#platform-design)
+* [To-Dos](#to-dos)
+* [Improvements](#improvements)
 
 ## Introduction
 This project showcased how to use Terraform to provision a games hosting platform in the AWS environment. This project utilizes the following AWS services:
@@ -118,7 +120,6 @@ The games backend should scale up or down dynamically based on gaming activities
 
 The analytics backend should scale up or down dynamically based on analytics activities. It processes incoming data on the fly directly from the games servers. It should support user SQL queries to access at least 10TB of historical data.
 
-## Platform Components
 This diagram depicts the key components of the platform.
 
 ![System diagram](img/system-diagram.png)
