@@ -145,3 +145,7 @@ variable "cloudwatch_agent_download_url" {
 variable "cloudwatch_agent_config_remote_path" {
   default = "/opt/aws/cloudwatch_agent.config"
 }
+
+variable "sqs_visibility_timeout_seconds" {
+  default = 120
+}
