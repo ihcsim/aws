@@ -8,7 +8,7 @@
     "namespace": "CWAgenti-${namespace_suffix}",
     "metrics_collected": {
       "mem": {
-        "measurement": ["mem_free", "mem_total"]
+        "measurement": ["mem_free", "mem_used", "mem_total"]
       },
       "swap": {
         "measurement": ["swap_free", "swap_used"]
