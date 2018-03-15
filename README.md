@@ -139,9 +139,20 @@ An autoscaling group is defined to manage the elasticity of the Games nodes usin
 
 Every EC2 instance has an ESB volume attached to it at the default location of `/opt/games/data`.
 
-### To-Do's
+To monitor memory utilization, CloudWatch agent is installed on every games node. The agent configuration template can be found in the `bootstrap/config/games/cloudwatch_agent.json` file.
 
-1. Custom memory metrics for games nodes
+## To-Dos
+The following is a list of items to be completed:
+
 1. Provision SQS.
-1. SQS client on API Server.
-1. Lambda to picks up files from S3 buckets.
+1. SQS client on API Server to push user's payload to SQS.
+1. SQS consumer on Games nodes to receive and process user's payload from SQS.
+1. Lambda to move new analytics files from S3 buckets to Analytics backend.
+1. Deploy Analytics backend with Hadoop and HDFS.
+1. Add cloudwatch alarms to system diagram.
+1. Define more load testing targets in Makefile.
+
+## Improvements
+The following is a list of improvements to be considered:
+
+1.  Replace API Server EC2 instances with AWS API Gateway.
