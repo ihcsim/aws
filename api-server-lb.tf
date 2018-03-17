@@ -52,4 +52,8 @@ resource "aws_lb_target_group" "http" {
     Owner = "${var.author}"
     Project = "${var.project}"
   }
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
