@@ -34,7 +34,7 @@ The following is the list of prerequisites to provision the platform:
 
 1. [Terraform v0.11.3](https://www.terraform.io/downloads.html)
 1. [Awsume 2.1.5](https://github.com/trek10inc/awsume)
-1. [Go 1.9.3](https://golang.org/dl/)
+1. [Go 1.9.10](https://golang.org/dl/)
 1. A valid (self-signed) SSL certificate.
 1. An AWS account with full permissions to all the AWS services mentioned above.
 
@@ -89,6 +89,19 @@ Upload a valid SSL certificate to the AWS Certificate Manager in the region of y
 After the SSL certificate is successfully added, provision the platform with:
 ```
 $ terraform apply
+```
+
+## Development
+The code of the API Server and Games Agent applications can be found in the `apps/` folder. The Makefile provides targets to build the Docker images of these applcations. The AWS SQS queue name can be specified using the `AWS_QUEUE_NAME` environment variable.
+
+To build the API Server Docker image, run:
+```
+$ AWS_QUEUE_NAME=<sqs_queue_name> make image/api-server
+```
+
+To build the Games Agent Docker image, run:
+```
+$ AWS_QUEUE_NAME=<sqs_queue_name> make image/games-agent
 ```
 
 ## Testing
