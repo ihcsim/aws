@@ -6,6 +6,7 @@
 * [Problem Definition](#problem-definition)
 * [Prerequisites](#prerequisites)
 * [Getting Started](#getting-started)
+* [Development](#development)
 * [Testing](#testing)
 * [Platform Design](#platform-design)
 * [To-Dos](#to-dos)
@@ -86,6 +87,10 @@ For example, if I want to store all the access logs in my us-west-2 `isim-ao` bu
 Upload a valid SSL certificate to the AWS Certificate Manager in the region of your platform. If needed, a self-signed certificate works too.
 
 ### Provision Platform
+Set up awsume using the instructions provided in its [docs](https://github.com/trek10inc/awsume#installation).
+
+Make a copy of the `terraform.tfvars.tmpl` file and name it `terraform.tfvars`. Update your `terraform.tfvars` file with the appropriate values. This file is ignored by git.
+
 After the SSL certificate is successfully added, provision the platform with:
 ```
 $ terraform apply
@@ -158,12 +163,10 @@ To monitor memory utilization, CloudWatch agent is installed on every games node
 ## To-Dos
 The following is a list of items to be completed:
 
-1. Provision SQS.
 1. SQS client on API Server to push user's payload to SQS.
 1. SQS consumer on Games nodes to receive and process user's payload from SQS.
 1. Lambda to move new analytics files from S3 buckets to Analytics backend.
 1. Deploy Analytics backend with Hadoop and HDFS.
-1. Add cloudwatch alarms to system diagram.
 1. Define more load testing targets in Makefile.
 
 ## Improvements
