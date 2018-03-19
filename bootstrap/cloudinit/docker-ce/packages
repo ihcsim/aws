@@ -1,0 +1,9 @@
+runcmd:
+- curl -fsSL ${gpg_url} | sudo apt-key add -
+- apt-key fingerprint ${gpg_fingerprint}
+- add-apt-repository "deb [arch=amd64] ${download_url} `lsb_release -cs` stable"
+- apt update
+- apt install -y docker-ce=${docker_version}
+- usermod -aG docker ${os_user}
+- systemctl enable docker
+- systemctl start docker

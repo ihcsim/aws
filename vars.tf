@@ -149,3 +149,26 @@ variable "cloudwatch_agent_config_remote_path" {
 variable "sqs_visibility_timeout_seconds" {
   default = 120
 }
+
+variable "docker_version" {
+  default = "17.12.1~ce-0~ubuntu"
+}
+
+variable "docker_download_url" {
+  default = "https://download.docker.com/linux/ubuntu"
+  description = "Refer https://docs.docker.com/install/linux/docker-ce/ubuntu/"
+}
+
+variable "docker_gpg_url" {
+  default = "https://download.docker.com/linux/ubuntu/gpg"
+  description = "Refer https://docs.docker.com/install/linux/docker-ce/ubuntu/"
+}
+
+variable "docker_gpg_fingerprint" {
+  default = "9DC8 5822 9FC7 DD38 854A E2D8 8D81 803C 0EBF CD88"
+  description = "Refer https://docs.docker.com/install/linux/docker-ce/ubuntu/"
+}
+
+variable "os_user" {
+  default = "ubuntu"
+}

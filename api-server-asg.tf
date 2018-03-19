@@ -231,6 +231,13 @@ data "template_cloudinit_config" "api_server" {
   part {
     content_type = "text/cloud-config"
     content = "${data.template_file.hosts.rendered}"
+    merge_type = "list(append)+dict(recurse_array)+str()"
+  }
+
+  part {
+    content_type = "text/cloud-config"
+    content = "${data.template_file.docker_ce.rendered}"
+    merge_type = "list(append)+dict(recurse_array)+str()"
   }
 }
 
@@ -240,4 +247,16 @@ data "template_file" "api_server_packages" {
 
 data "template_file" "hosts" {
   template = "${file("${path.module}/bootstrap/cloudinit/hosts")}"
+}
+
+data "template_file" "docker_ce" {
+  template = "${file("${path.module}/bootstrap/cloudinit/docker-ce/packages")}"
+
+  vars {
+    download_url = "${var.docker_download_url}"
+    docker_version = "${var.docker_version}"
+    gpg_fingerprint = "${var.docker_gpg_fingerprint}"
+    gpg_url = "${var.docker_gpg_url}"
+    os_user = "${var.os_user}"
+  }
 }

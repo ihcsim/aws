@@ -144,11 +144,19 @@ data "template_cloudinit_config" "games" {
   part {
     content_type = "text/cloud-config"
     content = "${data.template_file.hosts.rendered}"
+    merge_type = "list(append)+dict(recurse_array)+str()"
   }
 
   part {
     content_type = "text/cloud-config"
     content = "${data.template_file.cloudwatch_agent.rendered}"
+    merge_type = "list(append)+dict(recurse_array)+str()"
+  }
+
+  part {
+    content_type = "text/cloud-config"
+    content = "${data.template_file.docker_ce.rendered}"
+    merge_type = "list(append)+dict(recurse_array)+str()"
   }
 }
 
