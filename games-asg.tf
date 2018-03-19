@@ -40,7 +40,7 @@ resource "aws_launch_configuration" "games" {
   instance_type = "${var.instance_type["games"]}"
   image_id = "${var.ubuntu_ami}"
   key_name = "${var.keypair_name}"
-  iam_instance_profile = "${aws_iam_instance_profile.cloudwatch_agent.id}"
+  iam_instance_profile = "${aws_iam_instance_profile.games.id}"
 
   user_data = "${data.template_cloudinit_config.games.rendered}"
   security_groups = [

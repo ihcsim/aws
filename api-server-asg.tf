@@ -37,6 +37,7 @@ resource "aws_launch_configuration" "api_server" {
   image_id = "${var.ubuntu_ami}"
   key_name = "${var.keypair_name}"
   associate_public_ip_address = "true"
+  iam_instance_profile = "${aws_iam_instance_profile.api_server.id}"
 
   user_data = "${data.template_cloudinit_config.api_server.rendered}"
   security_groups = [
