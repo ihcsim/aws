@@ -42,8 +42,8 @@ resource "aws_lb_listener" "https" {
 }
 
 resource "aws_lb_target_group" "http" {
-  name = "${var.project}-api-servers"
-  port = "80"
+  name_prefix = "apisvr"
+  port = "8080"
   protocol = "HTTP"
   vpc_id = "${aws_vpc.main.id}"
 
