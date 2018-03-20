@@ -1,7 +1,7 @@
 .PHONY: images/build images/api-server/build images/games-agent/build images/push images/api-server/push images/games-agent/push load-test/tool load-test/network
 
 TEST_DURATION ?= 5s
-AWS_QUEUE_NAME ?= isim-ao-training-games-payload
+AWS_QUEUE_NAME ?= isim-ao-training-deployment-payload
 
 VERSION_API_SERVER = 0.0.1
 VERSION_GAMES_AGENT = 0.0.1
