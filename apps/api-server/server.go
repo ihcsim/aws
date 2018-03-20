@@ -82,6 +82,8 @@ func handler(w http.ResponseWriter, req *http.Request) {
 
 		w.WriteHeader(http.StatusOK)
 		w.Write(result)
+	case "GET":
+		w.WriteHeader(http.StatusOK)
 	default:
 		err := errors.New("Unsupported HTTP method")
 		handleError(err, http.StatusMethodNotAllowed, w)
