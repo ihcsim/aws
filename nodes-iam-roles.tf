@@ -22,3 +22,9 @@ resource "aws_iam_role_policy" "nodes_sqs" {
   role = "${aws_iam_role.nodes.id}"
   policy = "${data.aws_iam_policy_document.sqs.json}"
 }
+
+resource "aws_iam_role_policy" "nodes_ecr" {
+  name = "nodes-ecr"
+  role = "${aws_iam_role.nodes.id}"
+  policy = "${data.aws_iam_policy.ecr_read_only.policy}"
+}

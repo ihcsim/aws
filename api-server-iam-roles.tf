@@ -16,3 +16,9 @@ resource "aws_iam_role_policy" "api_server_sqs" {
   role = "${aws_iam_role.api_server.id}"
   policy = "${data.aws_iam_policy_document.sqs.json}"
 }
+
+resource "aws_iam_role_policy" "api_server_ecr" {
+  name = "api-server-ecr"
+  role = "${aws_iam_role.api_server.id}"
+  policy = "${data.aws_iam_policy.ecr_read_only.policy}"
+}
