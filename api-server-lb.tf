@@ -1,7 +1,7 @@
 resource "aws_lb" "api_server" {
   name = "${var.project}-api-server-lb"
   internal = "false"
-  security_groups = ["${aws_security_group.api_server.id}", "${aws_vpc.main.default_security_group_id}"]
+  security_groups = ["${aws_security_group.alb.id}", "${aws_vpc.main.default_security_group_id}"]
   subnets = ["${aws_subnet.public.*.id}"]
 
   access_logs = {
