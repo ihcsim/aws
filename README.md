@@ -19,7 +19,10 @@ This project showcased how to use Terraform to provision a games hosting platfor
 * Compute - EC2, Autoscaling with step and target tracking policies
 * Storage - S3, EBS
 * Monitoring - CloudWatch metrics, alarms and agents
-* Application - cloudinit
+* Queue - SQS with long polling
+* Container - ECR to store Docker images
+
+This project also includes two Go applications which can interact with SQS.
 
 ## Problem Definition
 Bionic Kumquat makes online, session-based, multiplayer games for the most popular mobile platforms. They build all of their games with some server-side integration, and has historically used separate bespoke backends for each of their games.
@@ -99,14 +102,14 @@ $ terraform apply
 ## Development
 The code of the API Server and Games Agent applications can be found in the `apps/` folder. The Makefile provides targets to build the Docker images of these applcations. The AWS SQS queue name can be specified using the `AWS_QUEUE_NAME` environment variable.
 
-To build the API Server Docker image, run:
+To build both the API Server and Games Agent Docker images, run:
 ```
-$ AWS_QUEUE_NAME=<sqs_queue_name> make image/api-server
+$ AWS_QUEUE_NAME=<sqs_queue_name> make images/build
 ```
 
-To build the Games Agent Docker image, run:
+To push both the API Server and Games Agent Docker images to the ECR, run:
 ```
-$ AWS_QUEUE_NAME=<sqs_queue_name> make image/games-agent
+$ AWS_ECR_URL=<ecr_url> make images/push
 ```
 
 ## Testing
