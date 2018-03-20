@@ -1,5 +1,5 @@
 resource "aws_iam_instance_profile" "api_server" {
-  name = "${var.author}-api-server"
+  name_prefix = "${var.author}-api-server"
   path = "/${var.project}/"
   role = "${aws_iam_role.api_server.name}"
 }

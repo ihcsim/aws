@@ -48,6 +48,6 @@ data "aws_iam_policy_document" "sqs" {
       "sqs:ChangeMessageVisibilityBatch",
       "sqs:SetQueueAttributes"
     ]
-    resources = ["${aws_sqs_queue.games_payload.arn}"]
+    resources = ["${aws_sqs_queue.deployment_payload.arn}"]
   }
 }

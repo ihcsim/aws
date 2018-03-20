@@ -1,5 +1,5 @@
-resource "aws_sqs_queue" "games_payload" {
-  name = "${var.project}-games-payload"
+resource "aws_sqs_queue" "deployment_payload" {
+  name = "${var.project}-deployment-payload"
   visibility_timeout_seconds = "${var.sqs_visibility_timeout_seconds}"
   receive_wait_time_seconds = "20"
 

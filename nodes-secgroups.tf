@@ -1,6 +1,6 @@
-resource "aws_security_group" "games" {
-  name = "${var.project}-games"
-  description = "Security group for the Games nodes"
+resource "aws_security_group" "nodes" {
+  name = "${var.project}-nodes"
+  description = "Security group for the nodes"
   vpc_id = "${aws_vpc.main.id}"
 
   ingress {
@@ -25,7 +25,7 @@ resource "aws_security_group" "games" {
   }
 
   tags {
-    Name = "${var.project}-games"
+    Name = "${var.project}-nodes"
     Owner = "${var.author}"
     Project = "${var.project}"
   }

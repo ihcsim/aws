@@ -44,7 +44,7 @@ variable "api_server_asg_size" {
   }
 }
 
-variable "games_asg_size" {
+variable "nodes_asg_size" {
   default = {
     "min" = 1
     "max" = 5
@@ -54,7 +54,7 @@ variable "games_asg_size" {
 variable "instance_type" {
   default = {
     "api_server" = "t2.micro"
-    "games" = "t2.micro"
+    "nodes" = "t2.micro"
     "analytics" = "t2.micro"
   }
 }
@@ -62,7 +62,7 @@ variable "instance_type" {
 variable "root_block_volume_types" {
   default = {
     "api_server" = "gp2"
-    "games" = "gp2"
+    "nodes" = "gp2"
     "analytics" = "gp2"
   }
 }
@@ -70,28 +70,28 @@ variable "root_block_volume_types" {
 variable "root_block_volume_sizes" {
   default = {
     "api_server" = "8"
-    "games" = "8"
+    "nodes" = "8"
     "analytics" = "8"
   }
 }
 
 variable "data_block_volume_devices" {
   default = {
-    "games" = "/dev/xvdf"
+    "nodes" = "/dev/xvdf"
     "analytics" = "/dev/xvdf"
   }
 }
 
 variable "data_block_volume_types" {
   default = {
-    "games" = "gp2"
+    "nodes" = "gp2"
     "analytics" = "gp2"
   }
 }
 
 variable "data_block_volume_sizes" {
   default = {
-    "games" = "4"
+    "nodes" = "4"
     "analytics" = "4"
   }
 }
@@ -114,11 +114,11 @@ variable "metrics_alarm_api_server_network_thresholds" {
   }
 }
 
-variable "metrics_alarm_games_cpu_target" {
+variable "metrics_alarm_nodes_cpu_target" {
   default = "70"
 }
 
-variable "metrics_alarm_games_network_in_target" {
+variable "metrics_alarm_nodes_network_in_target" {
   default = "1000000"
 }
 
@@ -128,12 +128,12 @@ variable "ssl_cert_arn" {}
 variable "elb_access_logs_bucket" {}
 variable "elb_access_logs_bucket_prefix" {}
 
-variable "games_user" {
+variable "nodes_user" {
   default = "gamer"
 }
 
-variable "games_data_folder" {
-  default = "/opt/games/data"
+variable "nodes_data_folder" {
+  default = "/opt/nodes/data"
 }
 
 variable "cloudwatch_agent_download_url" {
