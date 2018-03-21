@@ -34,8 +34,8 @@ images/api-server/push:
 
 images/games-agent/push:
 	test -n "$(AWS_ECR_URL)" # Missing AWS ECR URL
-	docker tag isim-ao-training/games-agent:$(VERSION_API_SERVER) $(AWS_ECR_URL)/isim-ao-training/games-agent:$(VERSION_API_SERVER)
-	docker push $(AWS_ECR_URL)/isim-ao-training/games-agent:$(VERSION_API_SERVER)
+	docker tag isim-ao-training/games-agent:$(VERSION_GAMES_AGENT) $(AWS_ECR_URL)/isim-ao-training/games-agent:$(VERSION_GAMES_AGENT)
+	docker push $(AWS_ECR_URL)/isim-ao-training/games-agent:$(VERSION_GAMES_AGENT)
 
 load-test/tool:
 	go get -u github.com/tsenart/vegeta
