@@ -40,6 +40,7 @@ func main() {
 
 	log.Printf("Starting server. Listening at port %s...", serverPort)
 	http.HandleFunc("/", handler)
+	http.HandleFunc("/health", healthCheck)
 	go func() {
 		if err := http.ListenAndServe(":"+serverPort, nil); err != nil {
 			log.Fatalf("Fail to server at port %s. Reason: %s", serverPort, err)
@@ -85,9 +86,14 @@ func handler(w http.ResponseWriter, req *http.Request) {
 	case "GET":
 		w.WriteHeader(http.StatusOK)
 	default:
-		err := errors.New("Unsupported HTTP method")
+		err := errors.New("Unsupported HTTP method " + req.Method)
 		handleError(err, http.StatusMethodNotAllowed, w)
 	}
+}
+
+func healthCheck(w http.ResponseWriter, req *http.Request) {
+	log.Println("Performing health check... OK")
+	w.WriteHeader(http.StatusOK)
 }
 
 func enqueue(req *http.Request) (io.Reader, error) {

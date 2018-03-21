@@ -47,6 +47,10 @@ resource "aws_lb_target_group" "http" {
   protocol = "HTTP"
   vpc_id = "${aws_vpc.main.id}"
 
+  health_check {
+    path = "/health"
+  }
+
   tags {
     Tier = "API Server"
     Owner = "${var.author}"
