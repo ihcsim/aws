@@ -53,9 +53,9 @@ variable "nodes_asg_size" {
 
 variable "instance_type" {
   default = {
-    "api_server" = "t2.micro"
-    "nodes" = "t2.micro"
-    "analytics" = "t2.micro"
+    "api_server" = "t2.small"
+    "nodes" = "t2.small"
+    "analytics" = "t2.small"
   }
 }
 
