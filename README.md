@@ -166,8 +166,7 @@ To monitor memory utilization, CloudWatch agent is installed on every games node
 ## To-Dos
 The following is a list of items to be completed:
 
-1. SQS client on API Server to push user's payload to SQS.
-1. SQS consumer on Games nodes to receive and process user's payload from SQS.
+1. CI pipelines to provision infrastructure and deploy Docker containers.
 1. Lambda to move new analytics files from S3 buckets to Analytics backend.
 1. Deploy Analytics backend with Hadoop and HDFS.
 1. Define more load testing targets in Makefile.
