@@ -4,3 +4,7 @@ package_upgrade: true
 packages:
 - ntp
 - unzip
+- python-pip
+
+runcmd:
+- pip install awscli --upgrade

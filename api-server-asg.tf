@@ -226,6 +226,7 @@ data "template_cloudinit_config" "api_server" {
   part {
     content_type = "text/cloud-config"
     content = "${data.template_file.api_server_packages.rendered}"
+    merge_type = "list(append)+dict(recurse_array)+str()"
   }
 
   part {

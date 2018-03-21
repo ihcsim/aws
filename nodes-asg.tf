@@ -134,6 +134,7 @@ data "template_cloudinit_config" "nodes" {
   part {
     content_type = "text/cloud-config"
     content = "${data.template_file.nodes_packages.rendered}"
+    merge_type = "list(append)+dict(recurse_array)+str()"
   }
 
   part {
