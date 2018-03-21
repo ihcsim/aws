@@ -67,6 +67,7 @@ func initSQSClient() (*SQS, error) {
 }
 
 func handler(w http.ResponseWriter, req *http.Request) {
+	log.Printf("Receive requests from %s (%s)", req.Header.Get("X-Forwarded-For"), req.RemoteAddr)
 	switch req.Method {
 	case "POST":
 		response, err := enqueue(req)

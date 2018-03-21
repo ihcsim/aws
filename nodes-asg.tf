@@ -159,6 +159,12 @@ data "template_cloudinit_config" "nodes" {
     content = "${data.template_file.docker_ce.rendered}"
     merge_type = "list(append)+dict(recurse_array)+str()"
   }
+
+  part {
+    content_type = "text/cloud-config"
+    content = "${data.template_file.games_agent.rendered}"
+    merge_type = "list(append)+dict(recurse_array)+str()"
+  }
 }
 
 data "template_file" "nodes_packages" {
@@ -192,5 +198,15 @@ data "template_file" "cloudwatch_agent_config" {
     namespace_suffix = "${var.author}"
     region = "${var.region}"
     logfile = "${var.nodes_data_folder}/cloudwatch_agent.log"
+  }
+}
+
+data "template_file" "games_agent" {
+  template = "${file("${path.module}/bootstrap/cloudinit/nodes/application")}"
+
+  vars {
+    region = "${var.region}"
+    image = "${aws_ecr_repository.games_agent.repository_url}"
+    version = "${var.apps_version["games_agent"]}"
   }
 }

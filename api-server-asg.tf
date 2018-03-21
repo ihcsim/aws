@@ -240,6 +240,12 @@ data "template_cloudinit_config" "api_server" {
     content = "${data.template_file.docker_ce.rendered}"
     merge_type = "list(append)+dict(recurse_array)+str()"
   }
+
+  part {
+    content_type = "text/cloud-config"
+    content = "${data.template_file.api_server.rendered}"
+    merge_type = "list(append)+dict(recurse_array)+str()"
+  }
 }
 
 data "template_file" "api_server_packages" {
@@ -259,5 +265,15 @@ data "template_file" "docker_ce" {
     gpg_fingerprint = "${var.docker_gpg_fingerprint}"
     gpg_url = "${var.docker_gpg_url}"
     os_user = "${var.os_user}"
+  }
+}
+
+data "template_file" "api_server" {
+  template = "${file("${path.module}/bootstrap/cloudinit/api-server/application")}"
+
+  vars {
+    region = "${var.region}"
+    image = "${aws_ecr_repository.api_server.repository_url}"
+    version = "${var.apps_version["api_server"]}"
   }
 }

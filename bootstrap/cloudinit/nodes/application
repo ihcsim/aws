@@ -1,0 +1,3 @@
+runcmd:
+- "`aws ecr get-login --region ${region} --no-include-email`"
+- docker run --name games-agent -d --restart=always ${image}:${version}

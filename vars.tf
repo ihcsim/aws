@@ -172,3 +172,10 @@ variable "docker_gpg_fingerprint" {
 variable "os_user" {
   default = "ubuntu"
 }
+
+variable "apps_version" {
+  default = {
+    "api_server" = "0.0.1"
+    "games_agent" = "0.0.1"
+  }
+}
